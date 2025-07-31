@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from typing import List
 
 import pytest
@@ -60,12 +61,15 @@ async def test_controller_query_should_return_success(client, products_url):
     assert isinstance(response.json(), List)
     assert len(response.json()) > 1
 
-
 async def test_controller_patch_should_return_success(
     client, products_url, product_inserted
 ):
+    
+    updated_date = datetime.now(timezone.utc)
+    format_string = '%Y-%m-%d %H:%M:%S'
+    date_string = updated_date.strftime(format_string)
     response = await client.patch(
-        f"{products_url}{product_inserted.id}", json={"price": "7.500"}
+        f"{products_url}{product_inserted.id}", json={"price": "150.800", "updated_at": date_string}
     )
 
     content = response.json()
@@ -78,7 +82,7 @@ async def test_controller_patch_should_return_success(
         "id": str(product_inserted.id),
         "name": "Iphone 14 Pro Max",
         "quantity": 10,
-        "price": "7.500",
+        "price": "150.800",
         "status": True,
     }
 

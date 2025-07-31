@@ -30,6 +30,10 @@ async def test_usecases_get_should_not_found():
         == "Product not found with filter: 1e4f214e-85f7-461a-89d0-a751a32e3bb9"
     )
 
+async def test_usecases_get_by_price_should_return_success():
+    result = await product_usecase.get_by_price()
+
+    assert len(result) > 1
 
 @pytest.mark.usefixtures("products_inserted")
 async def test_usecases_query_should_return_success():

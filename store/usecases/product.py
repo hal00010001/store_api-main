@@ -34,6 +34,9 @@ class ProductUsecase:
     async def query(self) -> List[ProductOut]:
         return [ProductOut(**item) async for item in self.collection.find()]
 
+    async def get_by_price(self) -> List[ProductOut]:
+        return [ProductOut(**item) async for item in self.collection.find({"price": {"$gt": 5.000, "$lt": 8.000}})]
+
     async def update(self, id: UUID, body: ProductUpdate) -> ProductUpdateOut:
         product = await self.collection.find_one({"id": id})
         if not product:
@@ -46,7 +49,7 @@ class ProductUsecase:
         )
 
         return ProductUpdateOut(**result)
-
+        
     async def delete(self, id: UUID) -> bool:
         product = await self.collection.find_one({"id": id})
         if not product:
